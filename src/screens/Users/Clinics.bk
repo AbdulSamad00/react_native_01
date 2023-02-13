@@ -1,0 +1,276 @@
+import { useIsFocused, useNavigation } from "@react-navigation/core";
+import dayjs from "dayjs";
+import React, { useEffect, useState } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { IconButton, Searchbar } from "react-native-paper";
+import { deleteClinic, getClinic, getClinics } from "../../api/clinics";
+import ActivityIndicator from "../../components/ActivityIndicator";
+import Table from "../../components/Datatable/AppTable";
+import Header from "../../components/Header";
+
+export  function Clinics({ navigation }) {
+  const focus = useIsFocused();
+  const [search, setSearch] = useState("");
+  const [searchedClinics, setSearchedClinics] = useState([]);
+  const [clinics, setClinics] = useState();
+  const [allClinics, setAllClinics] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [checkedClinics, setCheckedClinics] = useState([]);
+
+  const callForClinics = async () => {
+    setCheckedClinics([]);
+    setClinics([]);
+    setLoading(true);
+    const { ok, data } = await getClinics();
+    if (ok) {
+      setAllClinics(data);
+      const filterClinics = data.map((clinic) => {
+        return {
+          id: clinic._id,
+          Avatar: clinic.clinics.imageSrc,
+          Clinicname: clinic.clinics.username,
+          "Birth Date": dayjs(clinic.dateBirth).format("DD-MM-YYYY"),
+          Email: clinic.email,
+          Gender: clinic.gender,
+          "First Name": clinic.clinics.contactName.first,
+          Initials: clinic.clinics.contactName.initials,
+          "Last Name": clinic.clinics.contactName.last,
+          Address1: clinic.clinics.Address.address1,
+          Address2: clinic.clinics.Address.address2,
+          Address3: clinic.clinics.Address.address3,
+          "Zip Code": clinic.clinics.Address.zip,
+          City: clinic.clinics.Address.city,
+          State: clinic.clinics.Address.state,
+          Country: clinic.clinics.Address.country,
+          Phone: clinic.clinics.phones.phone,
+          Mobile: clinic.clinics.phones.mobile,
+          Skype: clinic.clinics.phones.skype,
+          Mood: clinic.mood,
+          About: clinic.about,
+          IBAN: clinic.bankInfo.IBAN,
+          Bank: clinic.bankInfo.bank,
+          "Branch of Bank": clinic.bankInfo.branchOfBank,
+          IBAN: clinic.bankInfo.IBAN,
+          Bank: clinic.bankInfo.bank,
+          "HPIO": clinic.clinics.healthcareProviderIdentifierOrganisation,
+          "HPII": clinic.clinics.healthcareProviderIdentifierIndividual,		  
+          IDPaper: clinic.identification.idPaper,
+          "IDPaper ValidTill": clinic.identification.idPaperValidTill,
+        };
+      });
+      setClinics(filterClinics);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    callForClinics();
+  }, [focus]);
+
+  const onChangeSearch = () => {
+    const filtered = clinics.filter(
+      (el) =>
+        `${el.Clinicname}`.toLowerCase().startsWith(search.toLowerCase()) ||
+        `${el.Email}`.toLowerCase().startsWith(search.toLowerCase())
+    );
+    setSearchedClinics(filtered);
+  };
+
+  return (
+    <View style={{ flex: 1 }}>
+      <ActivityIndicator visible={loading} />
+      <Header back title={"Clinics"} />
+      <IconBar
+        checkedClinics={checkedClinics}
+        clinics={allClinics}
+        callForClinics={callForClinics}
+      />
+      <Searchbar
+        style={styles.search}
+        underlineColorAndroid="white"
+        placeholder="Search"
+        clearButtonMode="while-editing"
+        value={search}
+        onChangeText={(search) => {
+          if (search.length < 1) {
+            setSearchedClinics();
+          } else {
+            setSearch(search);
+            onChangeSearch();
+          }
+        }}
+      />
+      {clinics && clinics.length > 0 && (
+        <Table
+          tableData={
+            searchedClinics && searchedClinics.length > 0
+              ? searchedClinics
+              : clinics
+          }
+          showCheckbox
+          checked={checkedClinics}
+          setChecked={setCheckedClinics}
+        />
+      )}
+    </View>
+  );
+}
+
+const IconBar = ({ checkedClinics, clinics, callForClinics }) => {
+  const { navigate } = useNavigation();
+
+  return (
+    <View style={{ height: 60, justifyContent: "center" }}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <IconButton
+          icon="plus"
+          style={{ marginLeft: 8, backgroundColor: "#07f" }}
+          color="white"
+          onPress={() => {
+            navigate("OperationsClinic");
+          }}
+        />
+        <IconButton
+          icon="pencil"
+          style={{ marginLeft: 8, backgroundColor: "yellow" }}
+          color="black"
+          onPress={async () => {
+            if (checkedClinics.length < 1) {
+              navigate("OperationsClinic");
+            }
+
+            const data = clinics.filter(
+              (clinic) => clinic._id == checkedClinics[0]
+            )[0];
+            const filter = {
+              _id: data._id,
+              username: data.clinics.username,
+              role: data.role,
+              email: data.clinics.email,
+              password: data.clinics.password,
+              dateBirth: data.clinics.dateBirth,
+              gender: data.clinics.gender,
+              imageSrc: data.clinics.imageSrc,
+              prefix: data.clinics.prefix,
+              firstName: data.clinics.contactName.first,
+              initials: data.clinics.contactName.initials,
+              lastName: data.clinics.contactName.last,
+              address1: data.clinics.Address.address1,
+              address2: data.clinics.Address.address2,
+              address3: data.clinics.Address.address3,
+              city: data.clinics.Address.city,
+              zip: data.clinics.Address.zip,
+              state: data.clinics.Address.state,
+              country: data.clinics.Address.country,
+              phone: data.clinics.phones.phone,
+              mobile: data.clinics.phones.mobile,
+              skype: data.clinics.phones.skype,
+              IBAN: data.bankInfo.IBAN,
+              bank: data.bankInfo.bank,
+              branchOfBank: data.bankInfo.branchOfBank,
+              primInsuranceNo: data.insurance.primInsuranceNo,
+              primInsurance: data.insurance.primInsurance,
+              primInsuranceValidTill: data.insurance.primInsuranceValidTill,
+              secInsuranceNo: data.insurance.secInsuranceNo,
+              secInsurance: data.insurance.secInsurance,
+              secInsuranceValidTill: data.insurance.secInsuranceValidTill,
+              idPaper: data.identification.idPaper,
+              idPaperValidTill: data.identification.idPaperValidTill,
+            };
+            navigate("OperationsClinic", {
+              selectedClinic: filter,
+            });
+          }}
+        />
+        <IconButton
+          icon="delete"
+          style={{ marginLeft: 8, backgroundColor: "#f44" }}
+          color="white"
+          onPress={() => {
+            console.log(checkedClinics);
+            if (checkedClinics.length < 1) return null;
+            checkedClinics.forEach(async (clinicId) => {
+              const { ok } = await deleteClinic(clinicId);
+              console.log(ok);
+              if (ok) {
+                callForClinics();
+                console.log("deleted");
+              }
+            });
+          }}
+        />
+        <IconButton
+          icon="file-delimited"
+          style={{ marginLeft: 8, backgroundColor: "lime" }}
+          color="white"
+        />
+        <IconButton
+          icon="file-pdf-box"
+          style={{ marginLeft: 8, backgroundColor: "red" }}
+          color="white"
+        />
+        <IconButton
+          icon="microsoft-excel"
+          style={{ marginLeft: 8, backgroundColor: "green" }}
+          color="white"
+        />
+        <IconButton
+          icon="printer"
+          style={{ marginLeft: 8, backgroundColor: "brown" }}
+          color="white"
+        />
+        <IconButton
+          icon="cloud-upload"
+          style={{ marginLeft: 8, backgroundColor: "cyan" }}
+          color="black"
+        />
+        <IconButton
+          icon="lock"
+          style={{ marginLeft: 8, backgroundColor: "red" }}
+          color="white"
+        />
+        <IconButton
+          icon="lock-open"
+          style={{ marginLeft: 8, backgroundColor: "green" }}
+          color="white"
+        />
+        <IconButton
+          icon="hand-right"
+          style={{ marginLeft: 8, backgroundColor: "red" }}
+          color="white"
+        />
+        <IconButton
+          icon="at"
+          style={{ marginLeft: 8, backgroundColor: "#0af" }}
+          color="white"
+        />
+        <IconButton
+          icon="chat"
+          style={{ marginLeft: 8, backgroundColor: "#0af" }}
+          color="white"
+        />
+      </ScrollView>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+  },
+  rightContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    paddingRight: 5,
+    width: "100%",
+  },
+  search: {
+    marginVertical: 10,
+    marginHorizontal: 10,
+    borderWidth: 0,
+    shadowOpacity: 0,
+    elevation: 0,
+  },
+});

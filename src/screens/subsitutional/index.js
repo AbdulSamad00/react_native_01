@@ -1,0 +1,11 @@
+export { Myaccount } from "./Myaccount";
+export { ChangePassword } from "./ChangePassword";
+export { Patient } from "./Patient";
+export { AddPatient } from "./AddPatient";
+export { PaymentsDetails } from "./PaymentsDetails";
+export { Financial } from "./Financial";
+export { AboutUs } from "./AboutUs";
+export { PrivacyPolicy } from "./PrivacyPolicy";
+export { TermsofUse } from "./TermsofUse";
+// export {FAQ} from './FAQ';
+export { Notifications } from "./Notifications";

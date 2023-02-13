@@ -1,0 +1,278 @@
+import { useIsFocused, useNavigation } from "@react-navigation/core";
+import dayjs from "dayjs";
+import React, { useEffect, useState } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { IconButton, Searchbar } from "react-native-paper";
+import { deleteReception, getReceptions } from "../../api/receptions";
+import ActivityIndicator from "../../components/ActivityIndicator";
+import Table from "../../components/Datatable/AppTable";
+import Header from "../../components/Header";
+
+export function Receptions({ navigation }) {
+  const focus = useIsFocused();
+  const [search, setSearch] = useState("");
+  const [searchedReceptions, setSearchedReceptions] = useState([]);
+  const [receptions, setReceptions] = useState();
+  const [allReceptions, setAllReceptions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [checkedReceptions, setCheckedReceptions] = useState([]);
+
+  const callForReceptions = async () => {
+    setCheckedReceptions([]);
+    setReceptions([]);
+    setLoading(true);
+    const { ok, data } = await getReceptions();
+    if (ok) {
+      setAllReceptions(data);
+      const filterReceptions = data.map((reception) => {
+        return {
+          id: reception._id,
+          Avatar: reception.receptions.imageSrc,
+          Receptionname: reception.receptions.username,
+          "Birth Date": dayjs(reception.dateBirth).format("DD-MM-YYYY"),
+          Email: reception.email,
+          Gender: reception.gender,
+          "First Name": reception.receptions.contactName.first,
+          Initials: reception.receptions.contactName.initials,
+          "Last Name": reception.receptions.contactName.last,
+          Address1: reception.receptions.Address.address1,
+          Address2: reception.receptions.Address.address2,
+          Address3: reception.receptions.Address.address3,
+          "Zip Code": reception.receptions.Address.zip,
+          City: reception.receptions.Address.city,
+          State: reception.receptions.Address.state,
+          Country: reception.receptions.Address.country,
+          Phone: reception.receptions.phones.phone,
+          Mobile: reception.receptions.phones.mobile,
+          Skype: reception.receptions.phones.skype,
+          Mood: reception.mood,
+          About: reception.about,
+          IBAN: reception.bankInfo.IBAN,
+          Bank: reception.bankInfo.bank,
+          "Branch of Bank": reception.bankInfo.branchOfBank,
+          "Prim InsuranceNo": reception.insurance.primInsuranceNo,
+          "Prim Insurance": reception.insurance.primInsurance,
+          "Prim Insurance ValidTill":
+            reception.insurance.primInsuranceValidTill,
+          "Sec. InsuranceNo": reception.insurance.secInsuranceNo,
+          "Sec. Insurance": reception.insurance.secInsurance,
+          "Sec. Insurance ValidTill": reception.insurance.secInsuranceValidTill,
+          IDPaper: reception.identification.idPaper,
+          "IDPaper ValidTill": reception.identification.idPaperValidTill,
+        };
+      });
+      setReceptions(filterReceptions);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    callForReceptions();
+  }, [focus]);
+
+  const onChangeSearch = () => {
+    const filtered = receptions.filter(
+      (el) =>
+        `${el.Receptionname}`.toLowerCase().startsWith(search.toLowerCase()) ||
+        `${el.Email}`.toLowerCase().startsWith(search.toLowerCase())
+    );
+    setSearchedReceptions(filtered);
+  };
+
+  return (
+    <View style={{ flex: 1 }}>
+      <ActivityIndicator visible={loading} />
+      <Header back title={"Patients"} />
+      <IconBar
+        checkedReceptions={checkedReceptions}
+        receptions={allReceptions}
+        callForReceptions={callForReceptions}
+      />
+      <Searchbar
+        style={styles.search}
+        underlineColorAndroid="white"
+        placeholder="Search"
+        clearButtonMode="while-editing"
+        value={search}
+        onChangeText={(search) => {
+          if (search.length < 1) {
+            setSearchedReceptions();
+          } else {
+            setSearch(search);
+            onChangeSearch();
+          }
+        }}
+      />
+      {receptions && receptions.length > 0 && (
+        <Table
+          tableData={
+            searchedReceptions && searchedReceptions.length > 0
+              ? searchedReceptions
+              : receptions
+          }
+          showCheckbox
+          checked={checkedReceptions}
+          setChecked={setCheckedReceptions}
+        />
+      )}
+    </View>
+  );
+}
+
+const IconBar = ({ checkedReceptions, receptions, callForReceptions }) => {
+  const { navigate } = useNavigation();
+
+  return (
+    <View style={{ height: 60, justifyContent: "center" }}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <IconButton
+          icon="plus"
+          style={{ marginLeft: 8, backgroundColor: "#07f" }}
+          color="white"
+          onPress={() => {
+            navigate("OperationsReception");
+          }}
+        />
+        <IconButton
+          icon="pencil"
+          style={{ marginLeft: 8, backgroundColor: "yellow" }}
+          color="black"
+          onPress={async () => {
+            if (checkedReceptions.length < 1) {
+              navigate("OperationsReception");
+            }
+
+            const data = receptions.filter(
+              (reception) => reception._id == checkedReceptions[0]
+            )[0];
+            console.log(data);
+            const filter = {
+              _id: data._id,
+              username: data.receptions.username,
+              profile: data.profile,
+              email: data.receptions.email,
+              password: data.receptions.password,
+              dateBirth: data.receptions.dateBirth,
+              gender: data.receptions.gender,
+              imageSrc: data.receptions.imageSrc,
+              prefix: data.receptions.prefix,
+              firstName: data.receptions.contactName.first,
+              initials: data.receptions.contactName.initials,
+              lastName: data.receptions.contactName.last,
+              address1: data.receptions.Address.address1,
+              address2: data.receptions.Address.address2,
+              address3: data.receptions.Address.address3,
+              city: data.receptions.Address.city,
+              zip: data.receptions.Address.zip,
+              state: data.receptions.Address.state,
+              country: data.receptions.Address.country,
+              phone: data.receptions.phones.phone,
+              mobile: data.receptions.phones.mobile,
+              skype: data.receptions.phones.skype,
+              IBAN: data.bankInfo.IBAN,
+              bank: data.bankInfo.bank,
+              branchOfBank: data.bankInfo.branchOfBank,
+              primInsuranceNo: data.insurance.primInsuranceNo,
+              primInsurance: data.insurance.primInsurance,
+              primInsuranceValidTill: data.insurance.primInsuranceValidTill,
+              secInsuranceNo: data.insurance.secInsuranceNo,
+              secInsurance: data.insurance.secInsurance,
+              secInsuranceValidTill: data.insurance.secInsuranceValidTill,
+              idPaper: data.identification.idPaper,
+              idPaperValidTill: data.identification.idPaperValidTill,
+            };
+            navigate("OperationsReception", {
+              selectedReception: filter,
+            });
+          }}
+        />
+        <IconButton
+          icon="delete"
+          style={{ marginLeft: 8, backgroundColor: "#f44" }}
+          color="white"
+          onPress={() => {
+            if (checkedReceptions.length < 1) return null;
+            checkedReceptions.forEach(async (receptionId) => {
+              const { ok } = await deleteReception(receptionId);
+              if (ok) {
+                console.log("deleted");
+                callForReceptions();
+              }
+            });
+          }}
+        />
+        <IconButton
+          icon="file-delimited"
+          style={{ marginLeft: 8, backgroundColor: "lime" }}
+          color="white"
+        />
+        <IconButton
+          icon="file-pdf-box"
+          style={{ marginLeft: 8, backgroundColor: "red" }}
+          color="white"
+        />
+        <IconButton
+          icon="microsoft-excel"
+          style={{ marginLeft: 8, backgroundColor: "green" }}
+          color="white"
+        />
+        <IconButton
+          icon="printer"
+          style={{ marginLeft: 8, backgroundColor: "brown" }}
+          color="white"
+        />
+        <IconButton
+          icon="cloud-upload"
+          style={{ marginLeft: 8, backgroundColor: "cyan" }}
+          color="black"
+        />
+        <IconButton
+          icon="lock"
+          style={{ marginLeft: 8, backgroundColor: "red" }}
+          color="white"
+        />
+        <IconButton
+          icon="lock-open"
+          style={{ marginLeft: 8, backgroundColor: "green" }}
+          color="white"
+        />
+        <IconButton
+          icon="hand-right"
+          style={{ marginLeft: 8, backgroundColor: "red" }}
+          color="white"
+        />
+        <IconButton
+          icon="at"
+          style={{ marginLeft: 8, backgroundColor: "#0af" }}
+          color="white"
+        />
+        <IconButton
+          icon="chat"
+          style={{ marginLeft: 8, backgroundColor: "#0af" }}
+          color="white"
+        />
+      </ScrollView>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+  },
+  rightContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    paddingRight: 5,
+    width: "100%",
+  },
+  search: {
+    marginVertical: 10,
+    marginHorizontal: 10,
+    borderWidth: 0,
+    shadowOpacity: 0,
+    elevation: 0,
+  },
+});

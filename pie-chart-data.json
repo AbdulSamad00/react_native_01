@@ -1,0 +1,35 @@
+[
+    {
+      "from": 0,
+      "range": 45,
+      "color": "#EA10DD",
+      "name": "bug-error"
+    },
+    {
+      "from": 45,
+      "range": 90,
+      "color": "#A959EF",
+      "name": "complaint"
+    },
+    {
+      "from": 90,
+      "range": 135,
+      "color": "#6355EE",
+      "name": "disconnection"
+    },
+    { "from": 135, "range": 180, "color": "#59C3F0", "name": "invoices" },
+    { "from": 180, "range": 225, "color": "#56EED3", "name": "feature-request" },
+    {
+      "from": 225,
+      "range": 270,
+      "color": "#57EE77",
+      "name": "orders"
+    },
+    { "from": 270, "range": 315, "color": "#A9EE56", "name": "support" },
+    {
+      "from": 315,
+      "range": 360,
+      "color": "#F0CD59",
+      "name": "other"
+    }
+  ]

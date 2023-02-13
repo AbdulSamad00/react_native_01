@@ -1,0 +1,13 @@
+diff --git a/node_modules/@florinchristian.dev/rn-table/src/Table.js b/node_modules/@florinchristian.dev/rn-table/src/Table.js
+index 0df25ca..86a551b 100644
+--- a/node_modules/@florinchristian.dev/rn-table/src/Table.js
++++ b/node_modules/@florinchristian.dev/rn-table/src/Table.js
+@@ -118,7 +118,7 @@ const Row = ({
+       </View>
+ 
+       {Object.entries(content).map(([key, value]) => {
+-        if (key !== uniqueKey)
++        if (key !== uniqueKey && dataWrapper[key] !== undefined)
+           return (
+             <View style={{
+               width: fitWidth ? null : dataWrapper[key].cellWidth,

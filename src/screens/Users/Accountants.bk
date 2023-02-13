@@ -1,0 +1,279 @@
+import { useIsFocused, useNavigation } from "@react-navigation/core";
+import dayjs from "dayjs";
+import React, { useEffect, useState } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { IconButton, Searchbar } from "react-native-paper";
+import { deleteAccountant, getAccountants } from "../../api/accountants";
+import ActivityIndicator from "../../components/ActivityIndicator";
+import Table from "../../components/Datatable/AppTable";
+import Header from "../../components/Header";
+
+export  function Accountants({ navigation }) {
+  const focus = useIsFocused();
+  const [search, setSearch] = useState("");
+  const [searchedAccountants, setSearchedAccountants] = useState([]);
+  const [accountants, setAccountants] = useState();
+  const [allAccountants, setAllAccountants] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [checkedAccountants, setCheckedAccountants] = useState([]);
+
+  useEffect(() => {
+    const callForAccountants = async () => {
+      setCheckedAccountants([]);
+      setAccountants([]);
+      setLoading(true);
+      const { ok, data } = await getAccountants();
+      if (ok) {
+        setAllAccountants(data);
+        const filterAccountants = data.map((accountant) => {
+          return {
+            id: accountant._id,
+            Avatar: accountant.accountants.imageSrc,
+            Accountantname: accountant.accountants.username,
+            "Birth Date": dayjs(accountant.dateBirth).format("DD-MM-YYYY"),
+            Email: accountant.email,
+            Gender: accountant.gender,
+            "First Name": accountant.accountants.contactName.first,
+            Initials: accountant.accountants.contactName.initials,
+            "Last Name": accountant.accountants.contactName.last,
+            Address1: accountant.accountants.Address.address1,
+            Address2: accountant.accountants.Address.address2,
+            Address3: accountant.accountants.Address.address3,
+            "Zip Code": accountant.accountants.Address.zip,
+            City: accountant.accountants.Address.city,
+            State: accountant.accountants.Address.state,
+            Country: accountant.accountants.Address.country,
+            Phone: accountant.accountants.phones.phone,
+            Mobile: accountant.accountants.phones.mobile,
+            Skype: accountant.accountants.phones.skype,
+            Mood: accountant.mood,
+            About: accountant.about,
+            IBAN: accountant.bankInfo.IBAN,
+            Bank: accountant.bankInfo.bank,
+            "Branch of Bank": accountant.bankInfo.branchOfBank,
+            "Prim InsuranceNo": accountant.insurance.primInsuranceNo,
+            "Prim Insurance": accountant.insurance.primInsurance,
+            "Prim Insurance ValidTill":
+              accountant.insurance.primInsuranceValidTill,
+            "Sec. InsuranceNo": accountant.insurance.secInsuranceNo,
+            "Sec. Insurance": accountant.insurance.secInsurance,
+            "Sec. Insurance ValidTill":
+              accountant.insurance.secInsuranceValidTill,
+            IDPaper: accountant.identification.idPaper,
+            "IDPaper ValidTill": accountant.identification.idPaperValidTill,
+          };
+        });
+        setAccountants(filterAccountants);
+        setLoading(false);
+      }
+    };
+    callForAccountants();
+  }, [focus]);
+
+  const onChangeSearch = () => {
+    const filtered = accountants.filter(
+      (el) =>
+        `${el.Accountantname}`.toLowerCase().startsWith(search.toLowerCase()) ||
+        `${el.Email}`.toLowerCase().startsWith(search.toLowerCase())
+    );
+    setSearchedAccountants(filtered);
+  };
+
+  return (
+    <View style={{ flex: 1 }}>
+      <ActivityIndicator visible={loading} />
+      <Header back title={"Accountants"} />
+      <IconBar
+        checkedAccountants={checkedAccountants}
+        accountants={allAccountants}
+      />
+      <Searchbar
+        style={styles.search}
+        underlineColorAndroid="white"
+        placeholder="Search"
+        clearButtonMode="while-editing"
+        value={search}
+        onChangeText={(search) => {
+          if (search.length < 1) {
+            setSearchedAccountants();
+          } else {
+            setSearch(search);
+            onChangeSearch();
+          }
+        }}
+      />
+      {accountants && accountants.length > 0 && (
+        <Table
+          tableData={
+            searchedAccountants && searchedAccountants.length > 0
+              ? searchedAccountants
+              : accountants
+          }
+          showCheckbox
+          checked={checkedAccountants}
+          setChecked={setCheckedAccountants}
+        />
+      )}
+    </View>
+  );
+}
+
+const IconBar = ({
+  checkedAccountants,
+
+  accountants,
+}) => {
+  const { navigate } = useNavigation();
+
+  return (
+    <View style={{ height: 60, justifyContent: "center" }}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <IconButton
+          icon="plus"
+          style={{ marginLeft: 8, backgroundColor: "#07f" }}
+          color="white"
+          onPress={() => {
+            navigate("OperationsAccountant");
+          }}
+        />
+        <IconButton
+          icon="pencil"
+          style={{ marginLeft: 8, backgroundColor: "yellow" }}
+          color="black"
+          onPress={async () => {
+            if (checkedAccountants.length < 1) {
+              navigate("OperationsAccountant");
+            }
+
+            const data = accountants.filter(
+              (accountant) => accountant._id == checkedAccountants[0]
+            )[0];
+            const cleanAccountant = {
+              _id: data._id,
+              username: data.accountants.username,
+              profile: data.profile,
+              email: data.accountants.email,
+              password: data.accountants.password,
+              dateBirth: data.accountants.dateBirth,
+              gender: data.accountants.gender,
+              imageSrc: data.accountants.imageSrc,
+              prefix: data.accountants.prefix,
+              firstName: data.accountants.contactName.first,
+              initials: data.accountants.contactName.initials,
+              lastName: data.accountants.contactName.last,
+              address1: data.accountants.Address.address1,
+              address2: data.accountants.Address.address2,
+              address3: data.accountants.Address.address3,
+              city: data.accountants.Address.city,
+              zip: data.accountants.Address.zip,
+              state: data.accountants.Address.state,
+              country: data.accountants.Address.country,
+              phone: data.accountants.phones.phone,
+              mobile: data.accountants.phones.mobile,
+              skype: data.accountants.phones.skype,
+              IBAN: data.bankInfo.IBAN,
+              bank: data.bankInfo.bank,
+              branchOfBank: data.bankInfo.branchOfBank,
+              primInsuranceNo: data.insurance.primInsuranceNo,
+              primInsurance: data.insurance.primInsurance,
+              primInsuranceValidTill: data.insurance.primInsuranceValidTill,
+              secInsuranceNo: data.insurance.secInsuranceNo,
+              secInsurance: data.insurance.secInsurance,
+              secInsuranceValidTill: data.insurance.secInsuranceValidTill,
+              idPaper: data.identification.idPaper,
+              idPaperValidTill: data.identification.idPaperValidTill,
+            };
+            navigate("OperationsAccountant", {
+              selectedAccountant: cleanAccountant,
+            });
+          }}
+        />
+        <IconButton
+          icon="delete"
+          style={{ marginLeft: 8, backgroundColor: "#f44" }}
+          color="white"
+          onPress={() => {
+            if (checkedAccountants.length < 1) return null;
+            checkedAccountants.forEach(async (accountantId) => {
+              const { ok } = await deleteAccountant(accountantId);
+              if (ok) {
+                console.log("deleted");
+              }
+            });
+          }}
+        />
+        <IconButton
+          icon="file-delimited"
+          style={{ marginLeft: 8, backgroundColor: "lime" }}
+          color="white"
+        />
+        <IconButton
+          icon="file-pdf-box"
+          style={{ marginLeft: 8, backgroundColor: "red" }}
+          color="white"
+        />
+        <IconButton
+          icon="microsoft-excel"
+          style={{ marginLeft: 8, backgroundColor: "green" }}
+          color="white"
+        />
+        <IconButton
+          icon="printer"
+          style={{ marginLeft: 8, backgroundColor: "brown" }}
+          color="white"
+        />
+        <IconButton
+          icon="cloud-upload"
+          style={{ marginLeft: 8, backgroundColor: "cyan" }}
+          color="black"
+        />
+        <IconButton
+          icon="lock"
+          style={{ marginLeft: 8, backgroundColor: "red" }}
+          color="white"
+        />
+        <IconButton
+          icon="lock-open"
+          style={{ marginLeft: 8, backgroundColor: "green" }}
+          color="white"
+        />
+        <IconButton
+          icon="hand-right"
+          style={{ marginLeft: 8, backgroundColor: "red" }}
+          color="white"
+        />
+        <IconButton
+          icon="at"
+          style={{ marginLeft: 8, backgroundColor: "#0af" }}
+          color="white"
+        />
+        <IconButton
+          icon="chat"
+          style={{ marginLeft: 8, backgroundColor: "#0af" }}
+          color="white"
+        />
+      </ScrollView>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+  },
+  rightContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    paddingRight: 5,
+    width: "100%",
+  },
+  search: {
+    marginVertical: 10,
+    marginHorizontal: 10,
+    borderWidth: 0,
+    shadowOpacity: 0,
+    elevation: 0,
+  },
+});

@@ -1,0 +1,70 @@
+{
+  "expo": {
+    "name": "med2",
+    "slug": "med2",
+    "version": "1.0.0",
+    "jsEngine": "hermes",
+    "orientation": "default",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/c73c29c8-2bf3-483d-a19e-ee627b596738"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "requireFullScreen": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.samixp.med2",
+      "versionCode": 1,
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "samixp",
+            "project": "react-native",
+            "authToken": "e135b95459e744919f605fb6fc08a9dd7af234621d3b48198b530364953811b8"
+          }
+        }
+      ]
+    },
+    "plugins": [
+      "sentry-expo",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ],
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c73c29c8-2bf3-483d-a19e-ee627b596738"
+        
+      }
+    }
+  }
+}

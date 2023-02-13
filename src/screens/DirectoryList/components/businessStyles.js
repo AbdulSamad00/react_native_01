@@ -1,0 +1,502 @@
+import { StyleSheet, Dimensions } from "react-native";
+import { w, h } from "react-native-responsiveness";
+const deviceWidth = Dimensions.get("window").width;
+
+export default styles = StyleSheet.create({
+    container: {
+        alignItems: 'flex-start',
+        paddingHorizontal: 10,
+        paddingTop: 20,
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+    separator: {
+        marginVertical: 30,
+        height: 1,
+        width: '80%',
+    },
+    statusAndPriorityContainer: {
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        justifyContent: 'space-around',
+    },
+    createdAndDeadlineContainer: {
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+    CategoryFieldPicker2: {
+        width: '50%',
+        flexDirection: 'column',
+    },
+    CategoryFieldPicker3: {
+        flexDirection: 'row',
+        width: '50%',
+    },
+    CategoryFieldPicker: {
+        paddingVertical: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    headerPicker: {
+        padding: 10,
+        borderColor: 'black',
+    },
+
+    navTab: {
+        backgroundColor: '#00ACAC',
+        padding: 10,
+        borderRadius: 5,
+        margin: 0.5,
+    },
+    fieldPicker: {
+        width: '70%',
+        // width: deviceWidth / 1.5,
+        borderColor: '#1239',
+        borderWidth: 1,
+        borderRadius: 5,
+        padding: 5,
+    },
+    navPicker: {
+        width: '60%',
+        // borderColor: '#1239',
+        // borderWidth: 1,
+        // borderRadius: 5,
+        padding: 5,
+    },
+    navBarContainer: {
+        padding: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        // paddingBottom: 20,
+    },
+    assignedTO: {
+        paddingLeft: 10,
+        borderColor: '#1239',
+        borderWidth: 0.8,
+        width: deviceWidth / 2 + 10,
+        paddingVertical: 5,
+        borderRadius: 5,
+    },
+    assignedTOContainer: {
+        width: deviceWidth / 1.5,
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginLeft: 20,
+        justifyContent: 'space-between',
+    },
+    img: {
+        width: 40,
+        height: 40,
+        borderRadius: 100,
+        borderWidth: 1,
+        borderColor: '#1239',
+    },
+    //
+    //
+
+    TopContainer: {
+        backgroundColor: '#00B7DD',
+        width: '100%',
+        height: h('8%'),
+        alignItems: 'center',
+    },
+    ContainerForPic: {
+        // backgroundColor: "red",
+        width: '100%',
+        height: h('6%'),
+        flexDirection: 'row',
+        marginTop: h('1%'),
+        paddingLeft: h('2%'),
+        paddingRight: h('3%'),
+    },
+    TopLeftContianer: {
+        // backgroundColor: 'green',
+        width: '10%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    TopMiddleContianer: {
+        // backgroundColor: 'gold',
+        width: '90%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    TopRightContianer: {
+        // backgroundColor: 'tomato',
+        width: '15%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    imgRenderDesgin: {
+        backgroundColor: 'white',
+        width: 100,
+        height: 100,
+        borderRadius: 110 / 2,
+    },
+    nameText: {
+        fontSize: h('2.5%'),
+        fontWeight: 'bold',
+        color: 'white',
+    },
+    rightContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        paddingRight: 5,
+        width: '100%',
+    },
+
+    // lowerContaierFlatlist: {
+
+    //   backgroundColor: "#F6F6F6",
+    //   width: "100%",
+    //   height: h("120%"),
+    //   alignItems: "center",
+    // },
+    flatlistContainer: {
+        // backgroundColor: 'tomato',
+        backgroundColor: "white",
+        // flex: 1,
+        width: w("94%"),
+        //height: h("40%"),
+        marginTop: h("1%"),
+        borderRadius: h("1.1%"),
+        // overflow: "hidden",
+        elevation: 1,
+    },
+    flatlistContainer4: {
+        // backgroundColor: "green",
+        backgroundColor: "white",
+        width: w("90%"),
+        height: h("30%"),
+        marginTop: h("1%"),
+        borderRadius: h("1.1%"),
+        // overflow: "hidden",
+        // elevation: h('0.1%'),
+    },
+    flatlistContainer2: {
+        backgroundColor: "white",
+        width: w("90%"),
+        height: h("30%"),
+        marginTop: h("1%"),
+        borderRadius: h("1.1%"),
+        // overflow: "hidden",
+        justifyContent: "center",
+        alignItems: "center",
+        // backgroundColor: "orange"
+    },
+    flatlistContainer3: {
+        backgroundColor: "white",
+        width: w("90%"),
+        height: h("43%"),
+        marginTop: h("1%"),
+        borderRadius: h("1.1%"),
+        // overflow: "hidden",
+        alignItems: "center",
+        // elevation: h('0.1%'),
+    },
+
+    Flatlist: {
+        // backgroundColor: '#f2f2',
+        alignItems: "center",
+    },
+    FlatListTopView: {
+        // backgroundColor: 'purple',
+        width: "100%",
+        height: h("5%"),
+        alignItems: "flex-end",
+    },
+    FlatListMiddleView: {
+        // backgroundColor: 'pink',
+        width: "100%",
+        height: h("14%"),
+        paddingVertical: '2%',
+        flexDirection: "row",
+    },
+    FlatListBottomView: {
+        // backgroundColor: 'green',
+        width: "100%",
+        height: h("6%"),
+        alignItems: "center",
+        flexDirection: "row",
+        paddingLeft: h("1.5%"),
+        paddingVertical: h("2%"),
+    },
+    ItemContainer: {
+        backgroundColor: "#003C75",
+        width: "30%",
+        height: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    ItemContainer2: {
+        backgroundColor: "#3DC03A",
+        width: "30%",
+        height: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    itemAppoinment: {
+        color: "white",
+        fontSize: h("2%"),
+    },
+    FlatlistMiddleLeft: {
+        // backgroundColor: 'red',
+        width: "24%",
+        height: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    FlatlistMiddleMiddle: {
+        // backgroundColor: 'gold',
+        width: "75%",
+        height: "100%",
+    },
+    ProfileImg: {
+        // backgroundColor: 'white',
+        width: 75,
+        height: 75,
+        borderRadius: 110 / 2,
+    },
+    imge: {
+        width: "100%",
+        height: "100%",
+        resizeMode: "contain",
+    },
+    Itemname: {
+        color: "black",
+        fontSize: h("3%"),
+    },
+    ItemTime: {
+        color: "#003C75",
+        fontSize: h("2.2%"),
+        fontWeight: "bold",
+    },
+    ItemTime3: {
+        color: "#D0021B",
+        fontSize: h("2.2%"),
+        fontWeight: "bold",
+    },
+    ItemSpecilist: {
+        color: "#0006",
+        fontSize: h("2%"),
+    },
+    ItemTime2: {
+        color: "#0006",
+        fontSize: h("2%"),
+    },
+    Buttons: {
+        width: "45%",
+        height: h("5%"),
+        // borderColor: "blue",
+        // borderWidth: 1,
+        // borderRadius: h("12%"),
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    Buttonicons: {
+        height: "50%",
+        width: "40%",
+        // backgroundColor: "red",
+        resizeMode: "contain",
+    },
+    ButtonText: {
+        fontSize: h("2%"),
+        color: "#003C75",
+    },
+    DocDetails: {
+        // backgroundColor: 'red',
+        width: "100%",
+        height: h("8%"),
+        paddingLeft: h("2%"),
+        justifyContent: "center",
+    },
+    DetailsContainer: {
+        // backgroundColor: 'gold',
+        width: "100%",
+        height: h("10%"),
+        paddingLeft: h("1.5%"),
+        justifyContent: "center",
+    },
+    DetailsContainer3: {
+        // backgroundColor: 'green',
+        width: "100%",
+        height: h("16%"),
+
+        justifyContent: "center",
+    },
+    DetailsContainer2: {
+        // backgroundColor: 'gold',
+        width: "100%",
+        height: h("5%"),
+        paddingLeft: h("2%"),
+        justifyContent: "center",
+    },
+    DocText: {
+        color: "black",
+        fontSize: h("3%"),
+        fontWeight: "bold",
+    },
+    DocTextabc: {
+        textTransform: "capitalize",
+        color: "black",
+        fontSize: h("2.2%"),
+    },
+    uploadContainer: {
+        backgroundColor: "white",
+        width: "90%",
+        height: h("10%"),
+        flexDirection: "row",
+        borderRadius: h("1%"),
+        marginTop: h("2%"),
+    },
+    leftContainer: {
+        // backgroundColor: 'gold',
+        width: "20%",
+        height: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    RightContainer: {
+        // backgroundColor: 'red',
+        width: "60%",
+        height: "100%",
+        paddingLeft: h("2%"),
+        justifyContent: "center",
+    },
+    leftbContainer: {
+        // backgroundColor: 'orange',
+        width: "20%",
+        height: "100%",
+
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    Uploadtext: {
+        color: "#000",
+        fontSize: h("2.5%"),
+    },
+    icons: {
+        width: "90%",
+        height: "90%",
+        resizeMode: "contain",
+    },
+    icons2: {
+        width: "50%",
+        height: "50%",
+        resizeMode: "contain",
+    },
+    paymentSlip: {
+        // backgroundColor: 'red',
+        width: "100%",
+        height: h("4%"),
+        flexDirection: "row",
+        justifyContent: "space-around",
+        alignItems: "center",
+    },
+    PaymentHeader: {
+        color: "#0007",
+        fontSize: h("2.5%"),
+    },
+    PaymentChild: {
+        color: "#000",
+        fontSize: h("2.2%"),
+    },
+    //---------------
+    statusAndPriorityContainer: {
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        justifyContent: 'space-around',
+    },
+    createdAndDeadlineContainer: {
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+    CategoryFieldPicker2: {
+        width: '50%',
+        flexDirection: 'column',
+    },
+    CategoryFieldPicker3: {
+        flexDirection: 'row',
+        width: '50%',
+    },
+    CategoryFieldPicker: {
+        paddingVertical: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    headerPicker: {
+        padding: 10,
+        borderColor: 'black',
+    },
+    attachmentContainer: {
+        width: '32%',
+        height: 80,
+        borderWidth: 0.8,
+        borderColor: '#1239',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: 2,
+    },
+    navTab: {
+        backgroundColor: '#00ACAC',
+        padding: 10,
+        borderRadius: 5,
+        margin: 0.5,
+    },
+    fieldPicker: {
+        width: '70%',
+        // width: deviceWidth / 1.5,
+        borderColor: '#1239',
+        borderWidth: 1,
+        borderRadius: 5,
+        padding: 5,
+    },
+    navPicker: {
+        width: '60%',
+        borderColor: '#1239',
+        borderWidth: 1,
+        borderRadius: 5,
+        padding: 5,
+    },
+    navBarContainer: {
+        padding: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingBottom: 20,
+    },
+    assignedTO: {
+        paddingLeft: 10,
+        borderColor: '#1239',
+        borderWidth: 0.8,
+        width: deviceWidth / 2 + 10,
+        paddingVertical: 5,
+        borderRadius: 5,
+    },
+    assignedTOContainer: {
+        width: deviceWidth / 1.5,
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginLeft: 20,
+        justifyContent: 'space-between',
+    },
+    headingContainer: {
+        marginVertical: 10
+    },
+    headingText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+    }
+
+});

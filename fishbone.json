@@ -1,0 +1,32 @@
+[
+  {
+    "rootCauses": "Bug-error",
+    "categories": ["too much water", "too many grounds", "lack of training"],
+    "color": "#E911DB"
+  },
+  {
+    "rootCauses": "Complaint",
+    "categories": ["too much water", "too many grounds", "lack of training"],
+    "color": "#8411E9"
+  },
+  {
+    "rootCauses": "Disconnection",
+    "categories": ["too much water", "too many grounds", "lack of training"],
+    "color": "#1F11E9"
+  },
+  {
+    "rootCauses": "Feature-request",
+    "categories": ["too much water", "too many grounds", "lack of training"],
+    "color": "#11A8E9"
+  },
+  {
+    "rootCauses": "Invoices",
+    "categories": ["too much water", "too many grounds", "lack of training"],
+    "color": "#11E9BE"
+  },
+  {
+    "rootCauses": "Orders",
+    "categories": ["too much water", "too many grounds", "lack of training"],
+    "color": "#11E93C"
+  }
+]

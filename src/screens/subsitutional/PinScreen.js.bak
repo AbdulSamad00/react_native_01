@@ -1,0 +1,361 @@
+import React, { useState,useContext, useEffect } from 'react'
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  TouchableHighlight,
+} from 'react-native'
+import Colors from '../../config/colors'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AuthContext from '../../auth/context';
+import authStorage from '../../auth/storage';
+import ActivityIndicator from '../../components/ActivityIndicator'
+const PinScreen = (props) => {
+let [Repeat,setRepeat]=useState(false)
+const [loading, setLoading] = useState(false);
+
+useEffect(()=>{
+  get_RepeatCheck()
+})
+
+useEffect(()=>{
+  setLoading(true)
+
+},[])
+
+let get_RepeatCheck=async()=>{
+  const v = await AsyncStorage.getItem('@Repeat_Key')
+  setLoading(false)
+
+if(v==='true'){
+setRepeat(true)
+
+// console.log("VALUE true>>>",v);
+}
+// console.log("VALUE False>>>",v);
+
+}
+
+
+  const authContext = useContext(AuthContext);
+ const [value, setValue] = useState('')
+  const {params}=props.route;
+let [error,setError]=useState('')
+
+
+
+// here is logout function
+let setLogout=async()=>{
+  await AsyncStorage.removeItem('@pin_Key');
+
+  let { setUser } = authContext;
+    setUser(null);
+    authStorage.deleteToken();
+    props.navigation.navigate('SplashScreen')
+}
+
+
+
+
+
+let CheckPassword=async()=>{
+if(value.length<5){
+  setError('Minimum Pin Length is 5')
+return
+}
+   try {
+      const value1 = await AsyncStorage.getItem('@pin_Key')
+      if(value1 ==value) {
+        
+        props.navigation.navigate('TabNavigation')
+        await AsyncStorage.setItem('@Repeat_Key', 'false')
+
+
+
+      }
+      else{
+setError("Wrong Pin Code")
+      }
+    } catch(e) {
+      console.log(e);
+    }
+  
+
+}
+
+
+
+
+  let GETVALUE=()=>{
+const storeData = async (value) => {
+  try {
+    // setRepeat(true)
+    await AsyncStorage.setItem('@pin_Key', value)
+    await AsyncStorage.setItem('@Repeat_Key', 'true')
+  } catch (e) {
+    // saving error
+    console.log(e);
+  }
+}
+storeData(value)
+authContext.setUser(params.user);
+    authStorage.saveToken(params.result.data);
+
+
+}
+  
+
+
+  const Pin = (props) => {
+    
+    return (
+      <View
+        style={{
+          width: 15,
+          height: 15,
+          borderWidth: 1,
+          borderRadius: 100,
+          ...props.style,
+        }}
+      />
+    )
+  }
+
+  const Keyboard = (props) => {
+    const keyboardHandler = () => {
+      if (value.length > 4) {
+        setValue(value)
+      } else {
+        setValue(value + props.num)
+      }
+    }
+
+
+
+
+
+
+    return (
+      <TouchableHighlight
+        activeOpacity={0.9}
+        underlayColor='#DDDDDD'
+        onPress={keyboardHandler}
+        style={{
+          backgroundColor: 'rgb(229,229,229)',
+          width: 60,
+          height: 60,
+          borderRadius: 20,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 30,
+            color: 'rgba(150,150,150,150)',
+            // fontFamily: 'Roboto-Bold',
+          }}
+        >
+          {props.num}
+        </Text>
+      </TouchableHighlight>
+    )
+  }
+
+  const deleteHandler = () => {
+    setValue(value.slice(0, value.length - 1))
+  }
+
+  return (
+    <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+      <View style={{ alignItems: 'center', marginTop: 50 }}>
+        <Image
+          source={require('../../assets/logo.png')}
+          style={{ width: 180, height: 50 }}
+        />
+      </View>
+      <ActivityIndicator visible={loading} /> 
+
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          marginTop: 20,
+        }}
+      >
+        <Text style={{ fontSize: 22,
+          //  fontFamily: 'Roboto-Black'
+            }}>
+{params?
+         params.desctr
+         :
+(Repeat)?
+"please enter pincode again"
+:
+'Type Your Pin to login'
+
+
+}
+        </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 30,
+          }}
+        >
+          <View style={{ marginHorizontal: 5 }}>
+            {value.length > 0 ? (
+              <Pin style={{ backgroundColor: 'black' }} />
+            ) : (
+              <Pin />
+            )}
+          </View>
+          <View style={{ marginHorizontal: 5 }}>
+            {value.length > 1 ? (
+              <Pin style={{ backgroundColor: 'black' }} />
+            ) : (
+              <Pin />
+            )}
+          </View>
+          <View style={{ marginHorizontal: 5 }}>
+            {value.length > 2 ? (
+              <Pin style={{ backgroundColor: 'black' }} />
+            ) : (
+              <Pin />
+            )}
+          </View>
+          <View style={{ marginHorizontal: 5 }}>
+            {value.length > 3 ? (
+              <Pin style={{ backgroundColor: 'black' }} />
+            ) : (
+              <Pin />
+            )}
+          </View>
+          <View style={{ marginHorizontal: 5 }}>
+            {value.length > 4 ? (
+              <Pin style={{ backgroundColor: 'black' }} />
+            ) : (
+              <Pin />
+            )}
+          </View>
+        </View>
+        <View
+          style={{ flexDirection: 'row', marginVertical: 10, marginTop: 40 }}
+        >
+          <View style={{ marginHorizontal: 20 }}>
+            <Keyboard num='1' />
+          </View>
+          <View style={{ marginHorizontal: 20 }}>
+            <Keyboard num='2' />
+          </View>
+          <View style={{ marginHorizontal: 20 }}>
+            <Keyboard num='3' />
+          </View>
+        </View>
+        <View style={{ flexDirection: 'row', marginVertical: 10 }}>
+          <View style={{ marginHorizontal: 20 }}>
+            <Keyboard num='4' />
+          </View>
+          <View style={{ marginHorizontal: 20 }}>
+            <Keyboard num='5' />
+          </View>
+          <View style={{ marginHorizontal: 20 }}>
+            <Keyboard num='6' />
+          </View>
+        </View>
+        <View style={{ flexDirection: 'row', marginVertical: 10 }}>
+          <View style={{ marginHorizontal: 20 }}>
+            <Keyboard num='7' />
+          </View>
+          <View style={{ marginHorizontal: 20 }}>
+            <Keyboard num='8' />
+          </View>
+          <View style={{ marginHorizontal: 20 }}>
+            <Keyboard num='9' />
+          </View>
+        </View>
+        <View style={{ flexDirection: 'row', marginVertical: 10 }}>
+          <View style={{ marginHorizontal: 20 }}>
+            <TouchableOpacity
+              onPress={deleteHandler}
+              style={{
+                width: 60,
+                height: 60,
+                borderRadius: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Image
+                source={require('../../assets/backspace.png')}
+                style={{ width: 50, height: 50, tintColor: Colors.brandDanger }}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={{ marginHorizontal: 20 }}>
+            <Keyboard num='0' />
+          </View>
+          <View style={{ marginHorizontal: 20 }}>
+         {params?
+            <TouchableOpacity
+            onPress={() => {
+              if (value.length === 5) {
+                //props.navigation.navigate('ForumCategories')
+                //props.navigation.navigate("MainNavigator")
+                // props.navigation.navigate("LoginScreen")
+                GETVALUE()
+              }
+            }}
+            style={{
+              width: 60,
+              height: 60,
+              borderRadius: 20,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Image
+              source={require('../../assets/done.png')}
+              style={{
+                width: 50,
+                height: 50,
+                tintColor: Colors.brandSuccess,
+              }}
+            />
+          </TouchableOpacity>
+          :
+          <TouchableOpacity
+          onPress={() => CheckPassword()}
+          style={{
+            width: 60,
+            height: 60,
+            borderRadius: 20,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Image
+            source={require('../../assets/done.png')}
+            style={{
+              width: 50,
+              height: 50,
+              tintColor: Colors.brandSuccess,
+            }}
+          />
+        </TouchableOpacity>}
+          </View>
+     </View>
+<Text style={{color:'red'}}>
+{error}
+</Text>   
+ <TouchableOpacity onPress={()=>setLogout()} style={{marginTop:50,width:'60%',backgroundColor:'#00aff0',height:50,display:'flex',alignItems:'center',justifyContent:'center',borderRadius:9}}>
+          <Text style={{fontSize:15,fontWeight:'700',color:'#fff'}}>LOGOUT</Text>
+        </TouchableOpacity> 
+      </View>
+    </View>
+  )
+}
+
+export default PinScreen

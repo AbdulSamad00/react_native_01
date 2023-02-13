@@ -1,0 +1,27 @@
+{
+  "cli": {
+    "version": ">= 0.43.0"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "channel": "development"
+    },
+    "preview": {
+      "android": {
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleRelease"
+      },
+      "channel": "preview"
+    },
+    "production": {
+      "node": "16.13.0",
+      "distribution": "internal",
+      "channel": "production"
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
