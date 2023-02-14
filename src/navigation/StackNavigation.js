@@ -511,17 +511,7 @@ const Stack = createStackNavigator();
             component={MyProfile}
             options={{ headerShown: false }}
           />
-          <Stack.Screen
-            name="HomeoPathySession"
-            component={HomeoPathySession}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="TCMSession"
-            component={TCMSession}
-            options={{ headerShown: false }}
-          />
-
+        
           <Stack.Screen
             name="COAs"
             component={COAs}
@@ -726,11 +716,11 @@ const Stack = createStackNavigator();
 
     
 
-          <Stack.Screen
+          {/* <Stack.Screen
             name="TimelineAttendance"
             component={TimelineAttendance}
             options={{ headerShown: false }}
-          />
+          /> */}
 
           <Stack.Screen
             name="ForumSubCategories"
