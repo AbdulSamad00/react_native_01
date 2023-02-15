@@ -9,7 +9,7 @@ import { ResetPassworded } from "../screens/welcome";
 import { Otp } from "../screens/welcome";
 import { Register } from "../screens/welcome";
 import { RegisterDoctor } from "../screens/welcome";
-import { ProfileSetup } from "../screens/welcome";
+//import { ProfileSetup } from "../screens/welcome";
 //import { SplashScreen } from "../screens/welcome";
 import PinScreen from '../screens/subsitutional/PinScreen'
 
@@ -52,11 +52,11 @@ export class AuthNavigation extends Component {
             options={{ headerShown: false }}
           />
 
-          <Stack.Screen
+          {/* <Stack.Screen
             name="ProfileSetup"
             component={ProfileSetup}
             options={{ headerShown: false }}
-          />
+          /> */}
           <Stack.Screen
             name="ResetPassworded"
             component={ResetPassworded}

@@ -20,7 +20,7 @@ import QRCode from "react-native-qrcode-svg";
 const deviceWidth = Dimensions.get("window").width;
 import { w, h } from "react-native-responsiveness";
 import { Icon } from "react-native-elements";
-import SharingInfo from "../../components/SharingInfo/index";
+//import SharingInfo from "../../components/SharingInfo/index";
 import TabComments from "../../components/TabComments";
 import TabNotes from "../../components/TabNotes";
 // react native hook
@@ -28,7 +28,7 @@ import { useDeviceOrientation } from "@react-native-community/hooks";
 // @package
 import * as Device from "expo-device";
 import Checkbox from "expo-checkbox";
-import DatePickerFuture from "../../components/DatePickerFuture";
+//import DatePickerFuture from "../../components/DatePickerFuture";
 import { AirbnbRating } from "react-native-ratings";
 import  AppSingleDropdown  from "../../components/forms/AppSingleDropdown";
 import { options, actions } from "../../config/pickerElements";

@@ -5,8 +5,8 @@ import React, {Component} from 'react';
 import {TouchableOpacity, StyleSheet, View, Text, Pressable} from 'react-native';
 import {w, h} from 'react-native-responsiveness';
 import {Icon} from 'react-native-elements';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MyDatePicker from './DatePick';
+//import Ionicons from 'react-native-vector-icons/Ionicons';
+//import MyDatePicker from './DatePick';
 
 
 export class NavForum extends Component {

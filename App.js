@@ -12,11 +12,20 @@ import { DeviceType, getDeviceTypeAsync } from "expo-device";
 import * as Sentry from 'sentry-expo';
 import 'react-native-url-polyfill/auto';
 import 'react-native-get-random-values';
+import Constants from 'expo-constants';
+import * as Updates from 'expo-updates';
 
 export const state = proxy({
   isTablet: false,
 });
 
+Sentry.init({
+  dsn: 'https://0e4e85c2923745b9ba04c3f7158ab954@o1130038.ingest.sentry.io/6179746',
+  enableInExpoDevelopment: true,
+  debug: true, // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
+  release: 'sentryMap',
+  //dist: `${Updates.platform}-update-${Updates.manifest.id}`,
+});
 
 
 //export default function App() {
@@ -36,13 +45,8 @@ export const state = proxy({
     console.log(state.isTablet);
   };
 
-  Sentry.init({
-    dsn: 'https://0e4e85c2923745b9ba04c3f7158ab954@o1130038.ingest.sentry.io/6179746',
-    enableInExpoDevelopment: true,
-    debug: true, // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
-  });
 
-  
+
   
   // Access any @sentry/react-native exports via:
   //Sentry.Native.*
@@ -51,9 +55,9 @@ export const state = proxy({
   //Sentry.Browser.*
 
 
-  SplashScreen.preventAutoHideAsync()
-  .then(result => cachedUser)
-  .catch(console.warn); // it's good to explicitly catch and inspect any error
+  //SplashScreen.preventAutoHideAsync()
+  //.then(result => cachedUser)
+  //.catch(console.warn); // it's good to explicitly catch and inspect any error
 
   useEffect(() => {
     getDeviceType();
@@ -61,9 +65,9 @@ export const state = proxy({
     console.disableYellowBox = true;
     //throw new Error("My first Sentry error!");
     cachedUser();
+    SplashScreen.hideAsync();
   }, []);
 
-  //MaazuHere
 
   if (!isReady) {
     //return (
@@ -72,7 +76,7 @@ export const state = proxy({
       //   onFinish={() => setIsReady(true)}
       //   onError={console.warn}
       // />
-      SplashScreen.hideAsync();
+    
 
    // );
   }
@@ -87,5 +91,5 @@ export const state = proxy({
     </Provider>
   );
 }
-
-export default Sentry.Native.wrap(App);
+export default App;
+//export default Sentry.Native.wrap(App);

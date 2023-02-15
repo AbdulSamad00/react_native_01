@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "med2",
-    "slug": "med2",
+    "name": "telemed2",
+    "slug": "telemed2",
     "version": "1.0.0",
     "jsEngine": "hermes",
     "orientation": "default",
@@ -13,7 +13,7 @@
     },
     "updates": {
       "fallbackToCacheTimeout": 0,
-      "url": "https://u.expo.dev/c73c29c8-2bf3-483d-a19e-ee627b596738"
+      "url": "https://u.expo.dev/a05c7f6f-7b3f-4ce2-a553-493fe43a1fe0"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -27,7 +27,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.samixp.med2",
+      "package": "com.samixp.telemed2",
       "versionCode": 1,
       "permissions": [
         "android.permission.RECORD_AUDIO"
@@ -37,7 +37,7 @@
       "favicon": "./assets/favicon.png"
     },
     "hooks": {
-      "postPublish": [
+      "postUpdate": [
         {
           "file": "sentry-expo/upload-sourcemaps",
           "config": {
@@ -62,9 +62,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "c73c29c8-2bf3-483d-a19e-ee627b596738"
-        
+        "projectId": "a05c7f6f-7b3f-4ce2-a553-493fe43a1fe0"
       }
-    }
+    },
+    "owner": "samixp"
   }
 }

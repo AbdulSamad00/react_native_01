@@ -39,7 +39,7 @@ import {
 
 
 
-import AppointmentProfile from "../screens/Planning/AppointmentProfile";
+//import AppointmentProfile from "../screens/Planning/AppointmentProfile";
 import Charts from "../screens/Accounting/Charts";
 
 import { AppoinmentDetails } from "../screens/Planning/appointmentDetails";
@@ -73,7 +73,7 @@ import Tasks from "../screens/Kanban/Tasks";
 import OperationsTicket from "../screens/Tickets/OperationsTicket";
 import Tickets from "../screens/Tickets/Tickets";
 import GridTickets from "../screens/Tickets/GridTickets";
-import TicketProfile from "../screens/Tickets/TicketProfile";
+//import TicketProfile from "../screens/Tickets/TicketProfile";
 
 import COAs from "../screens/Accounting/COAs";
 import Invoices from "../screens/Accounting/Invoices";
@@ -300,11 +300,11 @@ const Stack = createStackNavigator();
             options={{ headerShown: false }}
           />
   
-          <Stack.Screen
+          {/* <Stack.Screen
             name="AppointmentProfile"
             component={AppointmentProfile}
             options={{ headerShown: false }}
-          />
+          /> */}
 
           <Stack.Screen
             name="DirectoryList"
@@ -672,12 +672,12 @@ const Stack = createStackNavigator();
             component={OperationsTicket}
             options={{ headerShown: false }}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             initialParams={{ selectedTicket: {} }}
             name="TicketProfile"
             component={TicketProfile}
             options={{ headerShown: false }}
-          />
+          /> */}
        
           <Stack.Screen
             name="Contacts"
