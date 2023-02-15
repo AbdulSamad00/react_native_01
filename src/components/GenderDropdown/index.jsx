@@ -41,9 +41,7 @@ export default function GenderDropdown({ name }) {
       >
         <Menu.Item title="Male" onPress={() => onSelect("Male")} />
         <Menu.Item title="Female" onPress={() => onSelect("Female")} />
-        <Menu.Item
-          title="Transgender"
-          onPress={() => onSelect("Transgender")}
+        <Menu.Item title="Transgender" onPress={() => onSelect("Transgender")}
         />
       </Menu>
       <ErrorMessage error={errors[name]} visible={touched[name]} />
