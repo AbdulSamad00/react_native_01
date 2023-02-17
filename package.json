@@ -29,6 +29,7 @@
     "@sentry/react-native": "4.9.0",
     "apisauce": "^2.1.5",
     "assign-symbols": "^2.0.2",
+    "aws-amplify-react-native": "^7.0.2",
     "eas-cli": "^0.45.0",
     "expo": "^47.0.0",
     "expo-app-loading": "~2.1.1",

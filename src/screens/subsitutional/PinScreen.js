@@ -9,136 +9,152 @@ import {
   StatusBar,
   SafeAreaView,
   StyleSheet,
-  TextInput
+  TextInput,
+  ActivityIndicator
 } from 'react-native'
-//import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as ScreenOrientation from 'expo-screen-orientation';
-//import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AuthContext from '../../auth/context';
 import PinKey from '../../auth/pincode';
 import authStorage from '../../auth/storage';
-import { Navbar, AppText, Appbtn } from "../../components";
-
 const {width,height} = Dimensions.get("window");
 
 const numbers = [1,2,3,4,5,6,7,8,9,0];
+const MAX_PASSCODE_LENGTH = 5;
 
 const PinScreen = (props) => {
-const [Repeat,setRepeat]=useState(false)
+const [Repeat,setRepeat]=useState(false);
 const [loading, setLoading] = useState(true);
 const authContext = useContext(AuthContext);
-const [passcode, setPassCode] = useState(["","","","",""]);
-//const [code, setCode] = useState([...Array(5)].map(x => ""));
+//const [passcode, setPassCode] = useState(["","","","",""]);
+const [passcode, setPassCode] = useState(new Array(MAX_PASSCODE_LENGTH).fill(''));
 const [pinStatus,setPinStatus] = useState(false);
 const [message,setMessage] = useState("Enter a passcode");
 const [repeatPin,setRepeatPin] = useState("");
-//const {params}=props.route;
 const [error,setError]=useState('');
 
-const [pin1,setPin1] = useState("");
-const [pin2,setPin2] = useState("");
-const [pin3,setPin3] = useState("");
-const [pin4,setPin4] = useState("");
-const [pin5,setPin5] = useState("");
+const [pin, setPin] = useState(['', '', '', '', '']);
+const inputRefs = useRef([null, null, null, null, null]);
 
-const pin1Ref = useRef();
-const pin2Ref = useRef();
-const pin3Ref = useRef();
-const pin4Ref = useRef();
-const pin5Ref = useRef();
+const passcodeStack = useRef([]);
 
-/* const list = [...Array(5).keys()];
-const inputRef = useRef([]);
-
-const handler = idx => e => {
-  const next = inputRef.current[idx + 1];
-  if (next) {
-    next.focus()
-  }
-}; */
 useEffect(()=>{ 
-  //lockOrientation();
+  if (inputRefs.current[0]) inputRefs.current[0].focus();
   pincodeStatus();
+
 },[])
 
-
-
-const onNumPress = async(num)=>{
-  
-  //console.log("num",num);
-  //if(passcode.length === 5) return;
-  let code = [...passcode];
-  for(let i=0;i<code.length;i++){
-    if(code[i] === ""){
-      code[i] = num;
-      break;
-    }else{
-      continue;
-    }
-  }
-  setPassCode(code);
-  if(code.length === 5) {
-    //console.log("length ===5 ");
-    if(pinStatus) {
-      //console.log("pinStatus",pinStatus);
-         try {
-            const value = await PinKey.getPincode();
-            if(code.join('') == value) {
-              props.navigation.navigate('TabNavigation')
-            }
-            else{
-             setError("Wrong Pin Code")
-             //setMessage("Wrong Pin Code")
-            }
-          } catch(e) {
-            console.log(e);
-          }
-    }
+// const onNumPress = async(num)=>{
+//   setError("");
+//   setMessage("");
+//   let code = [...passcode];
+//   for(let i=0;i<code.length;i++){
+//     if(code[i] === ""){
+//       code[i] = num;
+//       break;
+//     }else{
+//       continue;
+//     }
+//   }
+//   setPassCode(code);
+//   if(code.length === 5) {
+//     if(pinStatus) {
+//          try {
+//             const value = await PinKey.getPincode();
+//             if(code.join('') == value) {
+//               props.navigation.navigate('TabNavigation')
+//             }
+//             else{
+//              setError("Wrong Pin Code");
+//              setMessage("Wrong Pin Code");
+//             }
+//           } catch(e) {
+//             console.log(e);
+//           }
+//     }
     
-  }
-}
+//   }
+// }
 
-const onDelete = ()=>{
-  console.log("delete");
-  let code = [...passcode];
-  for(let i=code.length-1;i>=0;i--){
-    if(code[i] !== ""){
-      code[i] = "";
-      break;
-    }else{
-      continue;
+// const onDelete = ()=>{
+//   setError("");
+//   setMessage("");
+//   console.log("delete");
+//   let code = [...passcode];
+//   for(let i=code.length-1;i>=0;i--){
+//     if(code[i] !== ""){
+//       code[i] = "";
+//       break;
+//     }else{
+//       continue;
+//     }
+//   }
+//   setPassCode(code);
+//   console.log("code:",code);
+// }
+
+
+const onNumPress = async (num) => {
+  setError('');
+  setMessage('');
+
+  if (passcodeStack.current.length < MAX_PASSCODE_LENGTH) {
+    passcodeStack.current.push(num);
+    setPassCode([...passcodeStack.current, ...new Array(MAX_PASSCODE_LENGTH - passcodeStack.current.length).fill('')]);
+
+    if (passcodeStack.current.length === MAX_PASSCODE_LENGTH) {
+      try {
+        const value = await PinKey.getPincode();
+        if (passcodeStack.current.join('') === value) {
+          props.navigation.navigate('TabNavigation');
+        } else {
+          setError('Wrong Pin Code');
+          setMessage('Wrong Pin Code');
+        }
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
-  setPassCode(code);
-  console.log("code:",code);
-}
+};
+
+const onDelete = () => {
+  setError('');
+  setMessage('');
+  console.log('delete');
+
+  if (passcodeStack.current.length > 0) {
+    passcodeStack.current.pop();
+    setPassCode([...passcodeStack.current, ...new Array(MAX_PASSCODE_LENGTH - passcodeStack.current.length).fill('')]);
+  }
+};
+
+const handleSubmit = async(index, value)=>{
+  const newPin = [...pin];
+    newPin[index] = value;
+    setPin(newPin);
+    if (value !== '' && index < 4) {
+      inputRefs.current[index + 1].focus();
+    }
+    if (newPin.join('').length === 5) {
+        await PinKey.savePincode(newPin.join(''));
+        props.navigation.navigate('TabNavigation')
+    }
+  
+};
 
 
 
-const handleSubmit = async()=>{
-  const value = [pin1,pin2,pin3,pin4,pin5];
-  const pin = value.join("");
-  if(pin.length != 5) return;
-  await PinKey.savePincode(pin);
-  props.navigation.navigate('TabNavigation')
-}
-
-
-
-// const lockOrientation = async () => {
-//   await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP)
-// }
 
 const pincodeStatus=async()=>{
   const pin = await PinKey.getPincode();
   console.log("pinStatus",pin);
-  //if(pin) setRepeat(true);
   if(pin) {
     setPinStatus(true);
     //setMessage("Type Your Pin to login");
   }
+
   setLoading(false);
+
 }
 
 
@@ -153,71 +169,19 @@ const  handleLogout=async()=>{
   let { setUser } = authContext;
     setUser(null);
     authStorage.deleteToken();
-    props.navigation.navigate('SplashScreen')
+    props.navigation.navigate('AuthNavigation', { screen: 'Login' });
+    
 }
 
-
-
-
-
-
-
-
-  const getValue= async()=>{
-  try {
-    // setRepeat(true)
-    //
-    console.log(value);
-    if(value.length<5){
-      setError('Minimum Pin Length is 5')
-    return
-    }
-    if(pinStatus) {
-      console.log("pinStatus",pinStatus);
-    
-         try {
-            const value1 = await PinKey.getPincode();
-            if(value1 == value) {
-              props.navigation.navigate('TabNavigation')
-            }
-            else{
-      setError("Wrong Pin Code")
-            }
-          } catch(e) {
-            console.log(e);
-          }
-    }else{
-      console.log("Repeat",Repeat);
-      if(!Repeat){
-        setRepeat(true);
-        setRepeatPin(value);
-        setValue("");
-        setMessage("please enter pincode again");
-        return;
-      }
-      
-
-        if(repeatPin == value) {
-           await PinKey.savePincode(value);
-          props.navigation.navigate('TabNavigation')
-        }else{
-  setError("Wrong Pin Code")
-        }
-   
-     
-    }
-    
-    
-  } catch (e) {
-    // saving error
-    console.log(e);
-  }
+if (loading) {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <ActivityIndicator size="large" color="#0000ff" />
+    </View>
+  );
 }
+
   
-
-
-
-
 
   return (
       <SafeAreaView style={styles.container}>
@@ -231,6 +195,9 @@ const  handleLogout=async()=>{
         }}
         blurRadius={40}
         />
+  
+
+
       {pinStatus?
      <>
       <View style={styles.swipe}>
@@ -305,109 +272,27 @@ const  handleLogout=async()=>{
 
     <View style={styles.TextinputFields}>
       <View style={styles.TextinputContainer}>
+      {pin.map((value, index) => (
         <TextInput
+          key={index}
           maxLength={1}
           style={[styles.TextInput]}
           keyboardType={"number-pad"}
           secureTextEntry={true}
-          ref={pin1Ref}
-          value={pin1}
-       onChangeText={(pin1) => {
-            setPin1(pin1);
-            if (pin1 !== "") {
-              pin2Ref.current.focus();
-            }
-          }} 
-        
+          value={value}
+          onChangeText={(value) => handleSubmit(index, value)}
+          ref={(ref) => (inputRefs.current[index] = ref)}
         />
-        <TextInput
-          maxLength={1}
-          style={styles.TextInput}
-          keyboardType={"number-pad"}
-          secureTextEntry={true}
-          ref={pin2Ref}
-          value={pin2}
-          onChangeText={(pin2) => {
-            setPin2(pin2);
-            if (pin2 !== "") {
-              pin3Ref.current.focus();
-            }
-          }} 
-          onKeyPress={({ nativeEvent }) => {
-            if (nativeEvent.key === 'Backspace') {
-              pin1Ref.current.focus()
-            }
-          }}
-        />
-        <TextInput
-          maxLength={1}
-          style={styles.TextInput}
-          keyboardType={"number-pad"}
-          secureTextEntry={true}
-          ref={pin3Ref}
-          value={pin3}
-          onChangeText={(pin3) => {
-            setPin3(pin3);
-            if (pin3 !== "") {
-              pin4Ref.current.focus();
-            }
-          }} 
-          onKeyPress={({ nativeEvent }) => {
-            if (nativeEvent.key === 'Backspace') {
-              pin2Ref.current.focus()
-            }
-          }}
-        />
-        <TextInput
-          maxLength={1}
-          style={styles.TextInput}
-          keyboardType={"number-pad"}
-          secureTextEntry={true}
-          value={pin4}
-          ref={pin4Ref}
-          onChangeText={(pin4) => {
-            setPin4(pin4);
-            if (pin4 !== "") {
-              pin5Ref.current.focus();
-            }
-          }} 
-          onKeyPress={({ nativeEvent }) => {
-            if (nativeEvent.key === 'Backspace') {
-              pin3Ref.current.focus()
-            }
-          }}
-        />
-          <TextInput
-          maxLength={1}
-          style={styles.TextInput}
-          keyboardType={"number-pad"}
-          secureTextEntry={true}
-          value={pin5}
-          ref={pin5Ref}
-          onChangeText={(pin5) => {
-            setPin5(pin5);
-          }} 
-          onKeyPress={({ nativeEvent }) => {
-            if (nativeEvent.key === 'Backspace') {
-              pin4Ref.current.focus()
-            }
-          }}
-        />
+        ))}
+
       </View>
-      <Appbtn
+      {/* <Appbtn
         onPress={handleSubmit}
         txt={"Submit"}
-      />
+      /> */}
     </View>
   </View>
     }
-
-
-
-
-
-
-
       </SafeAreaView>
   )
 }

@@ -1,5 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { AuthNavigation } from "./AuthNavigation";
 import { useState, useEffect, useRef } from "react";
 import useNotifications from "../hooks/useNotifications";
 
@@ -754,6 +755,7 @@ const Stack = createStackNavigator();
             component={ WorkingHours }
             options={{ headerShown: false }}
               />
+          <Stack.Screen name="AuthNavigation" component={AuthNavigation} />
         </Stack.Navigator>
       </NavigationContainer>
     );
