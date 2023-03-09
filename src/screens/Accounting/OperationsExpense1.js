@@ -188,39 +188,6 @@ export function OperationsExpense ({ route, navigation }) {
                       isMultiline={false}
                       name="lastName"
                     />
-                    <FormPicker
-                      style={{width: 250, marginVertical: 18}}
-                      textInputPlaceholder={Gender ? Gender.toUpperCase() : "Gender"}
-                      data={["Male", "Female", "Transgender"].map((gender) => ({
-                        label: gender, value: gender,
-                      }))}
-                      mode="flat"
-                      name="gender"
-                    />	
-
-                    <Text style={{ marginBottom: 5 }}>Date of Birth:</Text>
-
-                    <FormDatePicker
-                      left={
-                        <Icon
-                          name="calendar"
-                          size={18}
-                          style={{ alignSelf: "center" }}
-                        />
-                      }
-                      name="dateBirth"
-                      textStyle={{
-                        paddingVertical: 4,
-                        paddingHorizontal: 24,
-                        borderColor: "grey",
-                        borderRadius: 8,
-                        borderWidth: 1,
-                      }}
-                      defaultDate={ id ? new Date(dateBirth) : new Date() }
-                      maxYears="0"
-                      minYears="130"
-                      //onDateChange={(value) => console.log("Date:", value)}
-                    />
 
                     <Text style={{ marginBottom: 5, textAlign: "center" }}>
                       Profile

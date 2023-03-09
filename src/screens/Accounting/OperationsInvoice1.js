@@ -8,6 +8,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import * as Yup from "yup";
 import users from "../../api/users";
 import invoicesApi from "../../api/invoices";
+import { getPatients } from "../../../api/patients";
 import { Navbar } from "../../components";
 import ActivityIndicator from "../../components/ActivityIndicator";
 import {ErrorMessage,Form,FormDatePicker,FormField,FormPicker,FormSingleImagePicker,SubmitButton,} from "../../components/forms";
@@ -126,10 +127,7 @@ export function OperationsInvoice ({ route, navigation }) {
                   firstName: FirstName ? FirstName : "",
                   initials: Initials ? Initials : "",				  
                   lastName: LastName ? LastName : "",
-                  dateBirth: dateBirth ? new Date(dateBirth) : new Date(),				  
-                  gender: Gender ? Gender : "",
-                  username: Invoicename ? Invoicename : "",
-                  email: Email ? Email : "",
+                  username: Username ? Username : "",
                   role: Profile ? Profile._id : "",
                   address1: Address1 ? Address1 : "",
                   address2: Address2 ? Address2 : "",
@@ -175,89 +173,38 @@ export function OperationsInvoice ({ route, navigation }) {
                         Personalia
                       </Title>
                     </View>
-                    <Text>Avatar:</Text>
-                    <FormField
-                      Header={"First Name"}
-                      img={require("../../assets/icons/user.png")}
-                      placeholder="First Name"
-                      //autoCapitalize="none"
-                      secureTextEntry={false}
-                      isMultiline={false}
-                      name="firstName"
-                    />
-                    <FormField
-                      Header={"initials"}
-                      img={require("../../assets/icons/user.png")}
-                      placeholder="initials"
-                      //autoCapitalize="none"
-                      secureTextEntry={false}
-                      isMultiline={false}
-                      name="initials"
-                    />
-                    <FormField
-                      Header={"Last Name"}
-                      img={require("../../assets/icons/user.png")}
-                      placeholder="Last Name"
-                      //autoCapitalize="none"
-                      secureTextEntry={false}
-                      isMultiline={false}
-                      name="lastName"
-                    />
-                    <FormPicker
-                      style={{width: 250, marginVertical: 18}}
-                      textInputPlaceholder={Gender ? Gender.toUpperCase() : "Gender"}
-                      data={["Male", "Female", "Transgender"].map((gender) => ({
-                        label: gender, value: gender,
-                      }))}
-                      mode="flat"
-                      name="gender"
-                    />	
-
-                    <Text style={{ marginBottom: 5 }}>Date of Birth:</Text>
-
-                    <FormDatePicker
-                      left={
-                        <Icon
-                          name="calendar"
-                          size={18}
-                          style={{ alignSelf: "center" }}
-                        />
-                      }
-                      name="dateBirth"
-                      textStyle={{
-                        paddingVertical: 4,
-                        paddingHorizontal: 24,
-                        borderColor: "grey",
-                        borderRadius: 8,
-                        borderWidth: 1,
-                      }}
-                      defaultDate={ id ? new Date(dateBirth) : new Date() }
-                      maxYears="0"
-                      minYears="130"
-                      //onDateChange={(value) => console.log("Date:", value)}
-                    />
-
-                    <Text style={{ marginBottom: 5, textAlign: "center" }}>
-                      Profile
-                    </Text>
-                    <View
-                      style={{
-                        height: 64,
-                        width: "80%",
-                      }}
-                    >
-                      <FormPicker
-                        //label="Simple dropdown with avatar"
-                        textInputPlaceholder="Select Profile"
-                        data={getProfilesApi.data.map((profile) => ({
-                          label: `${profile.name}`,
-                          value: profile?._id,
-                        }))}
-                        mode="flat"
-                        name="role"
-                      />
-                    </View>
-                  </View>
+					<View
+					  style={{
+						marginBottom: 16,
+						width: "100%",
+						flexDirection: isTablet ? "row" : "column",
+						alignItems: isTablet ? "center" : null,
+					  }}
+					>
+					  <Text style={{ marginVertical: 10 }}>
+						Select registered patient from administration * :
+					  </Text>
+					  <View
+						style={{
+						  width: isTablet ? 350 : "100%",
+						  marginLeft: isTablet ? 30 : 0,
+						}}
+					  >
+						<Dropdown
+						  textInputPlaceholder="Select Patient"
+						  data={patientOptions}
+						  value={
+							selectedPatient
+							  ? selectedPatient?.id
+								? selectedPatient?.id
+								: ""
+							  : ""
+						  }
+						  onChange={(value) => handleSelect(value)}
+						  mode="flat"
+						/>
+					  </View>
+					</View>
                   <View
                     style={{
                       alignItems: "center",
@@ -269,22 +216,6 @@ export function OperationsInvoice ({ route, navigation }) {
                       paddingVertical: 16,
                     }}
                   >
-                    <View
-                      style={{
-                        position: "absolute",
-                        backgroundColor: "#f6f6f6",
-                        paddingHorizontal: 8,
-                        flexDirection: "row",
-                        alignItems: "center",
-                        top: -18,
-                        left: 24,
-                      }}
-                    >
-                      <Icon name="lock" size={24} />
-                      <Title style={{ fontWeight: "bold", marginLeft: 8 }}>
-                        Login Data
-                      </Title>
-                    </View>
                     <FormField
                       Header={"username"}
                       img={require("../../assets/icons/username.png")}
@@ -382,15 +313,6 @@ export function OperationsInvoice ({ route, navigation }) {
                     name="state"
                   />
 
-                <View>
-                  
-                </View>
-                <View style={{ position: "absolute", backgroundColor: "#f6f6f6", paddingHorizontal: 8, flexDirection: "row", alignItems: "center", top: -18,left: 24,}}>
-                      <Icon name="phone" size={24} />
-                      <Title style={{ fontWeight: "bold", marginLeft: 8 }}>
-                        Phones
-                      </Title>
-                </View>
                     <FormField
                       Header={"phone"}
                       img={require("../../assets/icons/phone.png")}
